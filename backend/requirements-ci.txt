@@ -1,0 +1,14 @@
+# Lightweight dependency set for CI unit tests.
+# Heavy ML deps (torch, chromadb, sentence-transformers, mlflow) are exercised
+# locally / in the container; tests that need them skip cleanly when absent.
+fastapi==0.115.6
+sqlalchemy==2.0.36
+psycopg2-binary==2.9.10
+pydantic==2.10.4
+pydantic-settings==2.7.0
+feedparser==6.0.11
+httpx==0.28.1
+apscheduler==3.11.0
+python-dotenv==1.0.1
+numpy==2.2.1
+pytest==8.3.4
