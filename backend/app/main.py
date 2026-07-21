@@ -18,6 +18,9 @@ from .schemas import (
     FeedbackIn,
     HealthResponse,
     IngestResponse,
+    QueryIn,
+    QueryResponse,
+    SourceOut,
 )
 from .scheduler import shutdown_scheduler, start_scheduler
 
@@ -100,3 +103,22 @@ def get_profile(session: Session = Depends(get_session)) -> dict:
 
     prof = load_profile(session)
     return {"dim": prof.dim, "n_useful": prof.n_useful, "n_skipped": prof.n_skipped}
+
+
+@app.post("/query", response_model=QueryResponse)
+def query(payload: QueryIn, session: Session = Depends(get_session)) -> QueryResponse:
+    """RAG: natural-language question -> semantic retrieval -> cited LLM answer."""
+    from .embeddings import get_embedder
+    from .llm import get_llm
+    from .rag import answer_query
+    from .vectorstore import get_articles_store
+
+    result = answer_query(
+        session, get_embedder(), get_articles_store(), get_llm(),
+        payload.query, k=payload.k, window_days=payload.window_days,
+    )
+    return QueryResponse(
+        query=result.query,
+        answer=result.answer,
+        sources=[SourceOut(**s.__dict__) for s in result.sources],
+    )

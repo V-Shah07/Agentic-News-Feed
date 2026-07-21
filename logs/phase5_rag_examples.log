@@ -1,0 +1,150 @@
+{
+  "timestamp": "2026-07-21T03:03:18.914721+00:00",
+  "llm_backend": "local:sshleifer/distilbart-cnn-12-6",
+  "examples": [
+    {
+      "query": "What happened in AI this week?",
+      "answer": "Hugging Face: We used AI to catch the first Confirmed AI Agent Breach of a Major AI Platform . The Great Freakout Over Open-Source AI Has Begun. Mythologizing AI makes it more likely that we\u2019ll fail to operate it well (2023)",
+      "sources": [
+        {
+          "article_id": 393,
+          "similarity": 0.5874,
+          "title": "Hugging Face: We Used AI to Catch the First Confirmed AI Agent Breach of a Major AI Platform",
+          "source": "gizmodo",
+          "url": "https://gizmodo.com/hugging-face-we-used-ai-to-catch-the-first-confirmed-ai-agent-breach-of-a-major-ai-platform-2000787778"
+        },
+        {
+          "article_id": 388,
+          "similarity": 0.4978,
+          "title": "The Great Freakout Over Open-Source AI Has Begun",
+          "source": "gizmodo",
+          "url": "https://gizmodo.com/the-great-freakout-over-open-source-ai-has-begun-2000787836"
+        },
+        {
+          "article_id": 406,
+          "similarity": 0.4878,
+          "title": "Cue AI",
+          "source": "hackernews",
+          "url": "https://deepmind.google/models/gemma/gemmaverse/cue-ai/"
+        },
+        {
+          "article_id": 35,
+          "similarity": 0.4612,
+          "title": "Mythologizing AI makes it more likely that we\u2019ll fail to operate it well (2023)",
+          "source": "hackernews",
+          "url": "https://www.newyorker.com/science/annals-of-artificial-intelligence/there-is-no-ai"
+        },
+        {
+          "article_id": 322,
+          "similarity": 0.4524,
+          "title": "World's Largest AI Model Repository Hugging Face Breached by Autonomous AI Agent",
+          "source": "thehackernews",
+          "url": "https://thehackernews.com/2026/07/worlds-largest-ai-model-repository.html"
+        },
+        {
+          "article_id": 280,
+          "similarity": 0.4495,
+          "title": "The cleanup trap: Stop asking RAG to fix bad data",
+          "source": "venturebeat",
+          "url": "https://venturebeat.com/orchestration/the-cleanup-trap-stop-asking-rag-to-fix-bad-data"
+        }
+      ]
+    },
+    {
+      "query": "What are the latest cybersecurity vulnerabilities and breaches?",
+      "answer": "Hackers are exploiting recently patched WordPress bugs, putting millions of websites at risk . Mozilla has released updates to address two critical flaws in Firefox for which it warned that exploit code has been published . Capital One releases VulnHunter, an open-source AI tool that finds software flaws before hackers do . Firefox, Chrome, Adobe, and VMware Updates Fix Multiple Critical Security Flaws .",
+      "sources": [
+        {
+          "article_id": 317,
+          "similarity": 0.5876,
+          "title": "\u26a1 Weekly Recap: WordPress RCE, SonicWall 0-Days, AI Service Attacks, SharePoint 0-Day and More",
+          "source": "thehackernews",
+          "url": "https://thehackernews.com/2026/07/weekly-recap-wordpress-rce-sonicwall-0.html"
+        },
+        {
+          "article_id": 338,
+          "similarity": 0.5385,
+          "title": "CISA Adds Exploited SharePoint RCE Zero-Day CVE-2026-58644 to KEV",
+          "source": "thehackernews",
+          "url": "https://thehackernews.com/2026/07/cisa-adds-exploited-sharepoint-rce-zero.html"
+        },
+        {
+          "article_id": 118,
+          "similarity": 0.5351,
+          "title": "Hackers are exploiting recently patched WordPress bugs, putting millions of websites at risk",
+          "source": "techcrunch",
+          "url": "https://techcrunch.com/2026/07/20/hackers-are-exploiting-recently-patched-wordpress-bugs-putting-millions-of-websites-at-risk/"
+        },
+        {
+          "article_id": 340,
+          "similarity": 0.4949,
+          "title": "ThreatsDay: Game Cheat Spyware, 24-Hour Ransomware, Chrome Sync Stalking + 12 More Stories",
+          "source": "thehackernews",
+          "url": "https://thehackernews.com/2026/07/threatsday-game-cheat-spyware-24-hour.html"
+        },
+        {
+          "article_id": 353,
+          "similarity": 0.4849,
+          "title": "Firefox, Chrome, Adobe, and VMware Updates Fix Multiple Critical Security Flaws",
+          "source": "thehackernews",
+          "url": "https://thehackernews.com/2026/07/firefox-chrome-adobe-and-vmware-updates.html"
+        },
+        {
+          "article_id": 283,
+          "similarity": 0.4772,
+          "title": "Capital One releases VulnHunter, an open-source AI tool that finds software flaws before hackers do",
+          "source": "venturebeat",
+          "url": "https://venturebeat.com/technology/capital-one-releases-vulnhunter-an-open-source-ai-tool-that-finds-software-flaws-before-hackers-do"
+        }
+      ]
+    },
+    {
+      "query": "Any notable news about chips or semiconductors?",
+      "answer": "Google is building a chip with Gemini baked into the silicon . Jeff Bezos and UK government invest in \u00a32bn British startup CuspAI . The next iPad mini is rumored to feature an OLED panel and a more powerful processor .",
+      "sources": [
+        {
+          "article_id": 293,
+          "similarity": 0.5558,
+          "title": "Google is building a chip with Gemini baked into the silicon",
+          "source": "thenextweb",
+          "url": "https://thenextweb.com/news/google-frozen-chip-gemini-silicon"
+        },
+        {
+          "article_id": 290,
+          "similarity": 0.4269,
+          "title": "A Chinese AI lab just built a giant data centre with no Nvidia inside",
+          "source": "thenextweb",
+          "url": "https://thenextweb.com/news/z-ai-data-centre-chinese-made-chips-nvidia"
+        },
+        {
+          "article_id": 249,
+          "similarity": 0.3817,
+          "title": "Jeff Bezos and UK government invest in \u00a32bn British startup CuspAI",
+          "source": "guardian-tech",
+          "url": "https://www.theguardian.com/technology/2026/jul/20/jeff-bezos-uk-government-invest-in-2bn-british-startup-cuspai"
+        },
+        {
+          "article_id": 309,
+          "similarity": 0.3753,
+          "title": "The iPad mini's biggest update in 5 years is expected this fall - here's what we know",
+          "source": "zdnet",
+          "url": "https://www.zdnet.com/article/apple-ipad-mini-2026-redesign-oled-rumors/"
+        },
+        {
+          "article_id": 111,
+          "similarity": 0.3749,
+          "title": "Google is working on a new AI chip designed to make Gemini more efficient",
+          "source": "techcrunch",
+          "url": "https://techcrunch.com/2026/07/20/google-is-working-on-a-new-ai-chip-designed-to-make-gemini-more-efficient/"
+        },
+        {
+          "article_id": 214,
+          "similarity": 0.3513,
+          "title": "Tech Life",
+          "source": "bbc-tech",
+          "url": "https://www.bbc.co.uk/sounds/play/w3ct8jy1?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    }
+  ]
+}

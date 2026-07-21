@@ -50,7 +50,7 @@ python -m backend.run_ingest
 | 2 | ChromaDB embeddings + novelty/dedup filter | ✅ done |
 | 3 | Interest profile + relevance scoring with implicit feedback | ✅ done |
 | 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ✅ done |
-| 5 | RAG `/query` endpoint | ⬜ |
+| 5 | RAG `/query` endpoint | ✅ done |
 | 6 | PyTorch fine-tuning + MLflow registry | ⬜ |
 | 7 | Thin React dashboard (sacrificial) | ⬜ |
 
@@ -95,6 +95,15 @@ low volume the agent skips clustering and summarizes directly (unit-tested). See
 > (`distilbart-cnn`) so it works with no external key; the backend auto-switches
 > to OpenAI (`gpt-4o-mini`) when `OPENAI_API_KEY` has quota — one code path,
 > selected at runtime in `backend/app/llm.py`.
+
+### Phase 5 evidence
+
+`POST /query` (or `python -m backend.run_rag`) embeds a natural-language question,
+retrieves the nearest articles from ChromaDB, and synthesizes a cited answer. E.g.
+*"What are the latest cybersecurity vulnerabilities and breaches?"* returned a
+coherent multi-sentence answer grounded in 6 retrieved articles (WordPress RCE,
+SonicWall 0-days, a CISA KEV entry, Firefox/Chrome patches) at cosine 0.48–0.59.
+Full example request/response in `logs/phase5_rag_examples.log`.
 
 ## Interview talking points
 

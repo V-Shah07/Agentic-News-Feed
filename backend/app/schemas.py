@@ -38,3 +38,24 @@ class HealthResponse(BaseModel):
     status: str
     articles: int
     sources_configured: int
+
+
+class QueryIn(BaseModel):
+    query: str
+    k: int = 6
+    window_days: int | None = None
+
+
+class SourceOut(BaseModel):
+    article_id: int
+    similarity: float
+    title: str
+    source: str
+    url: str
+    snippet: str
+
+
+class QueryResponse(BaseModel):
+    query: str
+    answer: str
+    sources: list[SourceOut]
