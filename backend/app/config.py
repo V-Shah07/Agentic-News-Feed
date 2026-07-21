@@ -24,7 +24,11 @@ class Settings(BaseSettings):
     embedding_model_path: str = ""
 
     # Novelty filter (Phase 2)
-    novelty_threshold: float = 0.85
+    # Calibrated from the empirical similarity distribution of a real ingested
+    # batch (see logs/phase2_threshold_calibration.log): every cross-source pair
+    # at cosine >= 0.70 was a verified same-story duplicate, while distinct
+    # stories sat below it. Tunable to trade recall vs dedup aggressiveness.
+    novelty_threshold: float = 0.70
     novelty_window_days: int = 30
 
     # LLM (Phase 4/5)

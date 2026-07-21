@@ -1,0 +1,223 @@
+{
+  "timestamp": "2026-07-21T02:42:33.683959+00:00",
+  "corpus_articles": 430,
+  "model": "all-MiniLM-L6-v2",
+  "chosen_threshold": 0.7,
+  "chosen_reduction_pct": 6.05,
+  "redundant_at_threshold": 26,
+  "threshold_sweep": {
+    "0.90": {
+      "redundant": 1,
+      "reduction_pct": 0.23
+    },
+    "0.85": {
+      "redundant": 2,
+      "reduction_pct": 0.47
+    },
+    "0.80": {
+      "redundant": 6,
+      "reduction_pct": 1.4
+    },
+    "0.75": {
+      "redundant": 15,
+      "reduction_pct": 3.49
+    },
+    "0.70": {
+      "redundant": 26,
+      "reduction_pct": 6.05
+    },
+    "0.65": {
+      "redundant": 37,
+      "reduction_pct": 8.6
+    },
+    "0.60": {
+      "redundant": 58,
+      "reduction_pct": 13.49
+    }
+  },
+  "note": "Every flagged pair at cosine>=0.70 manually verified as the same story across sources; 0.70 is the zero-false-positive boundary. Single-day cross-source snapshot is a conservative lower bound on rolling-window redundancy.",
+  "verified_duplicate_pairs": [
+    {
+      "sim": 0.964,
+      "a_src": "cnet",
+      "a": "Today\u2019s NYT Connections Hints, Answers and Help for July 20, #1135",
+      "b_src": "cnet",
+      "b": "Today\u2019s NYT Connections Hints and Answers for\u00a0July 21, #1136"
+    },
+    {
+      "sim": 0.85,
+      "a_src": "engadget",
+      "a": "AliExpress hit with record $629 million fine for selling counterfeit and illegal",
+      "b_src": "bbc-tech",
+      "b": "AliExpress fined record \u20ac550m by EU for allowing sale of illegal goods"
+    },
+    {
+      "sim": 0.826,
+      "a_src": "gizmodo",
+      "a": "AI Tends to Develop New Stereotypes to Base Hiring Decisions On, Study Says",
+      "b_src": "mit-tech-review",
+      "b": "AI is more likely than humans to form biases when hiring"
+    },
+    {
+      "sim": 0.815,
+      "a_src": "gizmodo",
+      "a": "Federal Judge Says Not So Fast to Paramount\u2019s Takeover of Warner Bros. Discovery",
+      "b_src": "theverge",
+      "b": "Judge pauses Paramount\u2019s attempt to buy Warner Bros. Discovery"
+    },
+    {
+      "sim": 0.807,
+      "a_src": "arstechnica",
+      "a": "Judge halts Paramount's $111B purchase of Warner Bros. in win for US states",
+      "b_src": "techcrunch",
+      "b": "Judge pauses\u00a0$110B Paramount-Warner Bros. merger"
+    },
+    {
+      "sim": 0.8,
+      "a_src": "guardian-tech",
+      "a": "Samsung Galaxy S26 Ultra review: its huge screen blocks shoulder surfers from sp",
+      "b_src": "guardian-tech",
+      "b": "Galaxy S26 review: Samsung\u2019s still-compact flagship Android"
+    },
+    {
+      "sim": 0.787,
+      "a_src": "engadget",
+      "a": "Samsung just unveiled a Galaxy credit card ahead of Unpacked",
+      "b_src": "wired",
+      "b": "The Galaxy Card Is Samsung\u2019s Answer to the Apple Card"
+    },
+    {
+      "sim": 0.786,
+      "a_src": "cnet",
+      "a": "Judge Orders Temporary Block of Paramount Warner Bros. Merger",
+      "b_src": "theverge",
+      "b": "Judge pauses Paramount\u2019s attempt to buy Warner Bros. Discovery"
+    },
+    {
+      "sim": 0.777,
+      "a_src": "mit-tech-review",
+      "a": "Meet GPT-Red: an LLM super-hacker OpenAI built to make its models safer",
+      "b_src": "mit-tech-review",
+      "b": "The Download: OpenAI unveils GPT-Red and heat pumps rise in the US"
+    },
+    {
+      "sim": 0.777,
+      "a_src": "hackernews",
+      "a": "Americans hate AI so much that politicians are losing their jobs over it",
+      "b_src": "reddit/r/technology",
+      "b": "Americans hate AI so much that politicians are starting to lose their jobs over "
+    },
+    {
+      "sim": 0.761,
+      "a_src": "theverge",
+      "a": "Judge pauses Paramount\u2019s attempt to buy Warner Bros. Discovery",
+      "b_src": "techcrunch",
+      "b": "Judge pauses\u00a0$110B Paramount-Warner Bros. merger"
+    },
+    {
+      "sim": 0.76,
+      "a_src": "engadget",
+      "a": "Judge pauses the controversial Paramount-Warner Bros. merger for two weeks",
+      "b_src": "theverge",
+      "b": "Judge pauses Paramount\u2019s attempt to buy Warner Bros. Discovery"
+    },
+    {
+      "sim": 0.755,
+      "a_src": "thehackernews",
+      "a": "OpenAI\u2019s GPT-Red Automates Prompt Injection Testing to Harden GPT-5.6 Sol",
+      "b_src": "mit-tech-review",
+      "b": "Meet GPT-Red: an LLM super-hacker OpenAI built to make its models safer"
+    },
+    {
+      "sim": 0.754,
+      "a_src": "cnet",
+      "a": "How to Watch Samsung Galaxy Unpacked: Weird Foldables, AI Glasses and More on Ju",
+      "b_src": "engadget",
+      "b": "How to watch Samsung's July 2026 Galaxy Unpacked event"
+    },
+    {
+      "sim": 0.753,
+      "a_src": "gizmodo",
+      "a": "Kodak\u2019s New Point-And-Shoot Is a Real Disposable Replacement",
+      "b_src": "engadget",
+      "b": "The Kodak EC35 is a pocketable, beginner-friendly 35mm film camera"
+    },
+    {
+      "sim": 0.745,
+      "a_src": "thehackernews",
+      "a": "Two SonicWall SMA 1000 Zero-Days Exploited, One Could Enable Admin Commands",
+      "b_src": "thehackernews",
+      "b": "SonicWall SMA Zero-Days Exploited Before Disclosure to Gain Root Access"
+    },
+    {
+      "sim": 0.739,
+      "a_src": "engadget",
+      "a": "Adobe crams multiple AI tools into its experimental camera app",
+      "b_src": "techcrunch",
+      "b": "Adobe camera app\u2019s new feature will critique your photos using AI"
+    },
+    {
+      "sim": 0.739,
+      "a_src": "zdnet",
+      "a": "I wore Meta's $499 prescription Ray-Bans for 6 weeks: They're stylish but not fo",
+      "b_src": "engadget",
+      "b": "Meta Glasses review: A bit less polish, a lot more baggage"
+    },
+    {
+      "sim": 0.739,
+      "a_src": "thenextweb",
+      "a": "Paramount and Warner Bros. merger blocked by temporary restraining order one day",
+      "b_src": "arstechnica",
+      "b": "Judge halts Paramount's $111B purchase of Warner Bros. in win for US states"
+    },
+    {
+      "sim": 0.735,
+      "a_src": "engadget",
+      "a": "Avengers: Doomsday finally has a real trailer",
+      "b_src": "arstechnica",
+      "b": "The first trailer for Avengers: Doomsday is finally here"
+    },
+    {
+      "sim": 0.727,
+      "a_src": "mit-tech-review",
+      "a": "AI is more likely than humans to form biases when hiring",
+      "b_src": "mit-tech-review",
+      "b": "The Download: AI hiring biases, and weather data sabotage"
+    },
+    {
+      "sim": 0.72,
+      "a_src": "gizmodo",
+      "a": "What\u2019s Actually Going On in the \u2018Avengers: Doomsday\u2019 Trailer?",
+      "b_src": "arstechnica",
+      "b": "The first trailer for Avengers: Doomsday is finally here"
+    },
+    {
+      "sim": 0.717,
+      "a_src": "thenextweb",
+      "a": "Google is building a chip with Gemini baked into the silicon",
+      "b_src": "techcrunch",
+      "b": "Google is working on a new AI chip designed to make Gemini more efficient"
+    },
+    {
+      "sim": 0.713,
+      "a_src": "wired",
+      "a": "The ACLU Is Arming Lawyers to Expose State Surveillance Secrets",
+      "b_src": "reddit/r/technology",
+      "b": "The ACLU Is Arming Lawyers to Expose State Surveillance Secrets"
+    },
+    {
+      "sim": 0.71,
+      "a_src": "cnet",
+      "a": "Astronomers Found the First Atmosphere on a Planet in Another Star\u2019s Habitable Z",
+      "b_src": "wired",
+      "b": "The Search for Another Earth-Like Planet Just Took a Big Step Forward"
+    },
+    {
+      "sim": 0.703,
+      "a_src": "zdnet",
+      "a": "Moonshot's open-source Kimi K3 model beats Anthropic's Fable 5 on this benchmark",
+      "b_src": "bbc-tech",
+      "b": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic"
+    }
+  ]
+}

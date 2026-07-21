@@ -47,7 +47,7 @@ python -m backend.run_ingest
 | Phase | What | Status |
 |---|---|---|
 | 1 | FastAPI + Postgres + multi-source ingestion + scheduler + CI | ✅ done |
-| 2 | ChromaDB embeddings + novelty/dedup filter | ⬜ |
+| 2 | ChromaDB embeddings + novelty/dedup filter | ✅ done |
 | 3 | Interest profile + relevance scoring with implicit feedback | ⬜ |
 | 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ⬜ |
 | 5 | RAG `/query` endpoint | ⬜ |
@@ -56,9 +56,20 @@ python -m backend.run_ingest
 
 ### Phase 1 evidence
 
-`python -m backend.run_ingest` pulled **170 articles from 10 live sources** into
-Postgres in one run (11 sources configured — HackerNews + 3 Reddit subreddits + 7
-editorial RSS feeds). See `logs/phase1_ingest.log`.
+`python -m backend.run_ingest` pulled **398 articles from 19 live sources** in one
+run (19 sources configured — HackerNews + 4 Reddit subreddits + 14 editorial RSS
+feeds). See `logs/phase1_ingest.log`.
+
+### Phase 2 evidence
+
+`python -m backend.run_novelty` embedded a 430-article corpus with a base
+`all-MiniLM-L6-v2` model and flagged **~6% as redundant** via ChromaDB cosine
+similarity against a rolling 30-day window. The threshold (0.70) was **calibrated
+from the empirical similarity distribution** — every flagged cross-source pair was
+manually verified as the same story (the Paramount–Warner ruling appeared across 5
+outlets, the AliExpress EU fine across 2, GPT-Red across 3). This single-day
+cross-source snapshot is a conservative lower bound on the rolling-window rate. See
+`logs/phase2_novelty.log` and `logs/phase2_threshold_calibration.log`.
 
 ## Interview talking points
 
