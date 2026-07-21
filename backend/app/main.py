@@ -12,7 +12,7 @@ from .config import get_settings
 from .db import get_session, init_db
 from .ingest import run_ingest
 from .ingest.sources import source_count
-from .models import Article, Feedback
+from .models import Article
 from .schemas import (
     ArticleOut,
     FeedbackIn,
@@ -61,22 +61,42 @@ def list_articles(
     limit: int = 50,
     offset: int = 0,
     source: str | None = None,
+    rank_by: str = "recent",  # recent | relevance
+    include_redundant: bool = True,
     session: Session = Depends(get_session),
 ) -> list[Article]:
-    stmt = select(Article).order_by(Article.fetched_at.desc())
+    stmt = select(Article)
     if source:
         stmt = stmt.where(Article.source == source)
+    if not include_redundant:
+        stmt = stmt.where(Article.is_redundant.is_(False))
+    if rank_by == "relevance":
+        stmt = stmt.order_by(Article.relevance_score.desc().nullslast())
+    else:
+        stmt = stmt.order_by(Article.fetched_at.desc())
     stmt = stmt.limit(min(limit, 200)).offset(offset)
     return list(session.scalars(stmt))
 
 
 @app.post("/feedback")
 def submit_feedback(payload: FeedbackIn, session: Session = Depends(get_session)) -> dict:
+    """Record implicit feedback and nudge the interest profile (Phase 3 loop)."""
     if payload.label not in ("useful", "skipped"):
         raise HTTPException(status_code=400, detail="label must be 'useful' or 'skipped'")
     article = session.get(Article, payload.article_id)
     if not article:
         raise HTTPException(status_code=404, detail="article not found")
-    session.add(Feedback(article_id=payload.article_id, label=payload.label))
-    session.commit()
-    return {"status": "ok"}
+
+    from .embeddings import get_embedder
+    from .profile import apply_feedback
+
+    prof = apply_feedback(session, get_embedder(), article, payload.label)
+    return {"status": "ok", "profile_useful": prof.n_useful, "profile_skipped": prof.n_skipped}
+
+
+@app.get("/profile")
+def get_profile(session: Session = Depends(get_session)) -> dict:
+    from .profile import load_profile
+
+    prof = load_profile(session)
+    return {"dim": prof.dim, "n_useful": prof.n_useful, "n_skipped": prof.n_skipped}

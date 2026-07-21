@@ -51,6 +51,25 @@ class Article(Base):
     feedback = relationship("Feedback", back_populates="article", cascade="all, delete-orphan")
 
 
+class UserProfile(Base):
+    """Single evolving interest-profile vector, learned from implicit feedback.
+
+    Stored as JSON so it is durable across restarts and portable between
+    Postgres and SQLite. The same vector is mirrored into Chroma for retrieval.
+    """
+
+    __tablename__ = "user_profile"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default="default")
+    vector_json: Mapped[str] = mapped_column(Text, default="")
+    dim: Mapped[int] = mapped_column(Integer, default=0)
+    n_useful: Mapped[int] = mapped_column(Integer, default=0)
+    n_skipped: Mapped[int] = mapped_column(Integer, default=0)
+    updated_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: dt.datetime.now(dt.timezone.utc)
+    )
+
+
 class Feedback(Base):
     """Implicit feedback: 'useful' or 'skipped' for interest-profile learning."""
 

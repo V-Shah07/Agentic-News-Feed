@@ -48,7 +48,7 @@ python -m backend.run_ingest
 |---|---|---|
 | 1 | FastAPI + Postgres + multi-source ingestion + scheduler + CI | ✅ done |
 | 2 | ChromaDB embeddings + novelty/dedup filter | ✅ done |
-| 3 | Interest profile + relevance scoring with implicit feedback | ⬜ |
+| 3 | Interest profile + relevance scoring with implicit feedback | ✅ done |
 | 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ⬜ |
 | 5 | RAG `/query` endpoint | ⬜ |
 | 6 | PyTorch fine-tuning + MLflow registry | ⬜ |
@@ -70,6 +70,16 @@ manually verified as the same story (the Paramount–Warner ruling appeared acro
 outlets, the AliExpress EU fine across 2, GPT-Red across 3). This single-day
 cross-source snapshot is a conservative lower bound on the rolling-window rate. See
 `logs/phase2_novelty.log` and `logs/phase2_threshold_calibration.log`.
+
+### Phase 3 evidence
+
+`python -m backend.run_profile` seeds implicit feedback on a labeled subset (220
+labeled articles), trains the interest-profile vector on a 70% split, and
+evaluates on the **held-out 30%**: mean relevance of "useful" articles **0.274 vs
+0.134** for "skipped" (separation **+0.139**, ranking **AUC 0.872**). The profile
+starts at zero separation and learns the split purely from the feedback nudges.
+Live in the API via `POST /feedback` → `GET /articles?rank_by=relevance`. See
+`logs/phase3_profile.log`.
 
 ## Interview talking points
 
