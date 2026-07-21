@@ -49,7 +49,7 @@ python -m backend.run_ingest
 | 1 | FastAPI + Postgres + multi-source ingestion + scheduler + CI | ✅ done |
 | 2 | ChromaDB embeddings + novelty/dedup filter | ✅ done |
 | 3 | Interest profile + relevance scoring with implicit feedback | ✅ done |
-| 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ⬜ |
+| 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ✅ done |
 | 5 | RAG `/query` endpoint | ⬜ |
 | 6 | PyTorch fine-tuning + MLflow registry | ⬜ |
 | 7 | Thin React dashboard (sacrificial) | ⬜ |
@@ -80,6 +80,21 @@ evaluates on the **held-out 30%**: mean relevance of "useful" articles **0.274 v
 starts at zero separation and learns the split purely from the feedback nudges.
 Live in the API via `POST /feedback` → `GET /articles?rank_by=relevance`. See
 `logs/phase3_profile.log`.
+
+### Phase 4 evidence
+
+`python -m backend.run_agent` runs a LangChain agent over the day's articles. The
+agent's tool selection is **volume-driven**: with 120 articles (≥ threshold) it
+invoked `cluster_tool` (k-means, k=12) → 12 clusters, then `summarize_tool` once
+per cluster (13 tool calls, **both** custom tools used). Clusters came out
+coherent — a cybersecurity/CVE group, a promo-codes group, a malware group. At
+low volume the agent skips clustering and summarizes directly (unit-tested). See
+`logs/phase4_agent_digest.log`.
+
+> **LLM backend:** synthesis runs on a local generative transformer
+> (`distilbart-cnn`) so it works with no external key; the backend auto-switches
+> to OpenAI (`gpt-4o-mini`) when `OPENAI_API_KEY` has quota — one code path,
+> selected at runtime in `backend/app/llm.py`.
 
 ## Interview talking points
 
