@@ -12,6 +12,7 @@ venv/
 chroma_data/
 mlruns/
 mlartifacts/
+mlflow.db
 models/finetuned/
 
 # OS

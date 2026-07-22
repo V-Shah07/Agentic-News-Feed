@@ -39,8 +39,8 @@ class Settings(BaseSettings):
     ingest_interval_seconds: int = 3600
     ingest_per_source_limit: int = 20
 
-    # MLflow (Phase 6)
-    mlflow_tracking_uri: str = "./mlruns"
+    # MLflow (Phase 6) — SQLite backend so the model registry is available.
+    mlflow_tracking_uri: str = "sqlite:///mlflow.db"
 
     @property
     def has_openai(self) -> bool:

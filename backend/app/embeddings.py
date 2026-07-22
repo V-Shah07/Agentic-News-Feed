@@ -26,15 +26,23 @@ def embedding_text(title: str, content: str = "", max_chars: int = 800) -> str:
 class Embedder:
     """Thin wrapper around a SentenceTransformer with cosine-normalized output."""
 
+    # Path the Phase 6 promotion step writes the winning model to.
+    PROMOTED_MODEL_DIR = "models/finetuned/production"
+
     def __init__(self, model_name_or_path: str | None = None):
         from sentence_transformers import SentenceTransformer  # lazy: heavy import
 
         settings = get_settings()
-        source = model_name_or_path or settings.embedding_model_path or settings.embedding_model
+        # Resolution order: explicit arg > EMBEDDING_MODEL_PATH > promoted model
+        # dir (MLflow-promoted) > base model.
+        source = (
+            model_name_or_path
+            or settings.embedding_model_path
+            or (self.PROMOTED_MODEL_DIR if os.path.isdir(self.PROMOTED_MODEL_DIR) else "")
+            or settings.embedding_model
+        )
         self.source = source
-        self.is_finetuned = bool(
-            settings.embedding_model_path and source == settings.embedding_model_path
-        ) or bool(model_name_or_path and os.path.exists(str(model_name_or_path)))
+        self.is_finetuned = os.path.isdir(str(source))
         logger.info("Loading embedding model: %s", source)
         self.model = SentenceTransformer(source)
         self.dim = self.model.get_sentence_embedding_dimension()
