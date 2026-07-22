@@ -24,27 +24,30 @@ EXPERIMENT = "interest-embedder-finetune"
 REGISTERED_MODEL = "interest-embedder"
 PROD_DIR = "models/finetuned/production"
 
+# Configs sweep the converged region found during calibration (cosine-distance
+# contrastive objective, matching the cosine relevance metric). Under-trained
+# low-epoch configs regress a near-ceiling base model, so promotion (best AUC)
+# is a real decision, not a formality.
+MAX_PAIRS = 800
 CONFIGS = [
-    TrainConfig("contrastive-1ep", loss="contrastive", epochs=1, batch_size=16, lr=2e-5, max_pairs=1000),
-    TrainConfig("contrastive-2ep", loss="contrastive", epochs=2, batch_size=16, lr=2e-5, max_pairs=1000),
-    TrainConfig("online-2ep-bs32", loss="online_contrastive", epochs=2, batch_size=32, lr=3e-5, max_pairs=1000),
-    TrainConfig("online-3ep", loss="online_contrastive", epochs=3, batch_size=16, lr=2e-5, max_pairs=1000),
+    TrainConfig("online-cos-3ep-lr3e5", loss="online_contrastive", epochs=3, batch_size=32, lr=3e-5, max_pairs=MAX_PAIRS, margin=0.5),
+    TrainConfig("online-cos-4ep-lr3e5", loss="online_contrastive", epochs=4, batch_size=32, lr=3e-5, max_pairs=MAX_PAIRS, margin=0.5),
+    TrainConfig("online-cos-3ep-lr5e5", loss="online_contrastive", epochs=3, batch_size=32, lr=5e-5, max_pairs=MAX_PAIRS, margin=0.5),
+    TrainConfig("contrastive-cos-4ep-lr3e5", loss="contrastive", epochs=4, batch_size=32, lr=3e-5, max_pairs=MAX_PAIRS, margin=0.5),
 ]
 
 
 def main() -> None:
     settings = get_settings()
     base_model = settings.embedding_model
-    init_db()
 
     mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
     mlflow.set_experiment(EXPERIMENT)
     client = MlflowClient()
 
-    with session_scope() as session:
-        labeled = load_labeled(session)
+    labeled = load_labeled_snapshot()
     train, test = split(labeled, test_ratio=0.3, seed=13)
-    pairs = build_pairs(train, max_pairs=1000, seed=13)
+    pairs = build_pairs(train, max_pairs=MAX_PAIRS, seed=13)
     log.info("labeled=%d train=%d test=%d pairs=%d", len(labeled), len(train), len(test), len(pairs["label"]))
 
     # ---- base model held-out metric ----
@@ -103,18 +106,12 @@ def main() -> None:
     except Exception as exc:  # stages deprecated on some backends; alias is source of truth
         log.info("stage transition skipped (%s); alias 'production' set", type(exc).__name__)
 
-    # deploy: copy the promoted model to the production path the embedder reads
-    if os.path.isdir(best["out_dir"]):
-        src = best["out_dir"]
-    else:
-        src = mlflow.artifacts.download_artifacts(best["model_uri"]) + "/model"
-        src = src if os.path.isdir(src) else best["out_dir"]
+    # deploy: load the promoted version from the registry and write it to the
+    # production path the embedder reads (the Trainer doesn't persist to out_dir).
+    best_model = mlflow.sentence_transformers.load_model(best["model_uri"])
     os.makedirs(os.path.dirname(PROD_DIR), exist_ok=True)
     if os.path.isdir(PROD_DIR):
         shutil.rmtree(PROD_DIR)
-    # re-save the best model cleanly to the production dir
-    from sentence_transformers import SentenceTransformer as ST
-    best_model = ST(best["out_dir"]) if os.path.isdir(best["out_dir"]) else base
     best_model.save(PROD_DIR)
 
     payload = {
