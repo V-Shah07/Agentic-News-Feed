@@ -13,8 +13,7 @@ import mlflow
 from mlflow.tracking import MlflowClient
 
 from backend.app.config import get_settings
-from backend.app.db import init_db, session_scope
-from backend.app.finetune.dataset import build_pairs, load_labeled, split
+from backend.app.finetune.dataset import build_pairs, load_labeled_snapshot, split
 from backend.app.finetune.evaluate import evaluate_model
 from backend.app.finetune.train import TrainConfig, finetune
 

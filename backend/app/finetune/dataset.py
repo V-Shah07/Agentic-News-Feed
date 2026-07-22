@@ -7,6 +7,8 @@ uninteresting content away — i.e. align embeddings to reading history.
 """
 from __future__ import annotations
 
+import json
+import os
 import random
 from dataclasses import dataclass
 
@@ -16,6 +18,8 @@ from sqlalchemy.orm import Session
 from ..embeddings import embedding_text
 from ..feedback_sim import label_title
 from ..models import Article
+
+SNAPSHOT_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "articles_snapshot.json")
 
 
 @dataclass
@@ -32,6 +36,22 @@ def load_labeled(session: Session) -> list[LabeledItem]:
         if lb is None:
             continue
         items.append(LabeledItem(art.id, embedding_text(art.title, art.content), lb))
+    return items
+
+
+def load_labeled_snapshot(path: str = SNAPSHOT_PATH) -> list[LabeledItem]:
+    """Load labeled items from the committed corpus snapshot (no DB required).
+
+    Keeps Phase 6 reproducible and independent of a live Postgres, which matters
+    for long training runs and for anyone re-running the fine-tune from a clone.
+    """
+    rows = json.load(open(os.path.abspath(path)))
+    items: list[LabeledItem] = []
+    for r in rows:
+        lb = label_title(r["title"])
+        if lb is None:
+            continue
+        items.append(LabeledItem(r["id"], embedding_text(r["title"], r.get("content", "")), lb))
     return items
 
 
