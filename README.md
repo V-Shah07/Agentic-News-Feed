@@ -52,7 +52,7 @@ python -m backend.run_ingest
 | 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ✅ done |
 | 5 | RAG `/query` endpoint | ✅ done |
 | 6 | PyTorch fine-tuning + MLflow registry | ✅ done |
-| 7 | Thin React dashboard (sacrificial) | ⬜ |
+| 7 | Thin React dashboard (sacrificial) | ✅ done |
 
 ### Phase 1 evidence
 

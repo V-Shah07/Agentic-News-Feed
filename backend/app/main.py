@@ -5,6 +5,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -39,6 +40,17 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Agentic Information Diet Manager", version="0.1.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Simple in-memory digest cache (the agent + LLM are slow to run per request).
+_digest_cache: dict = {"data": None, "ts": 0.0}
+_DIGEST_TTL = 900  # seconds
 
 
 @app.get("/health", response_model=HealthResponse)
@@ -103,6 +115,42 @@ def get_profile(session: Session = Depends(get_session)) -> dict:
 
     prof = load_profile(session)
     return {"dim": prof.dim, "n_useful": prof.n_useful, "n_skipped": prof.n_skipped}
+
+
+@app.get("/digest")
+def digest(refresh: bool = False, session: Session = Depends(get_session)) -> dict:
+    """Clustered daily digest with per-cluster briefings (cached; TTL 15m)."""
+    import time
+
+    now = time.time()
+    if not refresh and _digest_cache["data"] and now - _digest_cache["ts"] < _DIGEST_TTL:
+        return _digest_cache["data"]
+
+    from .agent.digest import DigestAgent
+
+    agent = DigestAgent()
+    d = agent.run(session, since_hours=72)
+    data = {
+        "generated_at": d.generated_at,
+        "n_articles": d.n_articles,
+        "strategy": d.strategy,
+        "n_clusters": d.n_clusters,
+        "llm_backend": agent.llm.name,
+        "clusters": [
+            {
+                "cluster_id": b.cluster_id,
+                "size": b.size,
+                "briefing": b.briefing,
+                "top_titles": b.top_titles,
+                "article_ids": b.article_ids,
+            }
+            for b in d.briefings
+        ],
+        "trace": [{"tool": t.tool, "args": t.args_summary} for t in d.trace],
+    }
+    _digest_cache["data"] = data
+    _digest_cache["ts"] = now
+    return data
 
 
 @app.post("/query", response_model=QueryResponse)
