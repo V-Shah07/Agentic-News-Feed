@@ -51,7 +51,7 @@ python -m backend.run_ingest
 | 3 | Interest profile + relevance scoring with implicit feedback | ✅ done |
 | 4 | LangChain agent: `cluster_tool` + `summarize_tool` | ✅ done |
 | 5 | RAG `/query` endpoint | ✅ done |
-| 6 | PyTorch fine-tuning + MLflow registry | ⬜ |
+| 6 | PyTorch fine-tuning + MLflow registry | ✅ done |
 | 7 | Thin React dashboard (sacrificial) | ⬜ |
 
 ### Phase 1 evidence
@@ -104,6 +104,54 @@ retrieves the nearest articles from ChromaDB, and synthesizes a cited answer. E.
 coherent multi-sentence answer grounded in 6 retrieved articles (WordPress RCE,
 SonicWall 0-days, a CISA KEV entry, Firefox/Chrome patches) at cosine 0.48–0.59.
 Full example request/response in `logs/phase5_rag_examples.log`.
+
+### Phase 6 evidence ⭐ (the differentiator)
+
+`python -m backend.run_finetune` fine-tunes the base `all-MiniLM-L6-v2` on
+contrastive pairs built from the implicit-feedback labels (useful pulled
+together, skipped pushed apart, under cosine distance to match the relevance
+metric). It **tracked 5 experiments across 4 hyperparameter configs** in MLflow,
+registered each as a model version, and promoted the best to production:
+
+| run | loss | epochs | lr | held-out AUC | Δ vs base |
+|---|---|---|---|---|---|
+| base-model | — | — | — | 0.8945 | — |
+| online-cos-3ep-lr3e5 | online-contrastive | 3 | 3e-5 | 0.9764 | +9.2% |
+| online-cos-4ep-lr3e5 | online-contrastive | 4 | 3e-5 | 0.9818 | +9.8% |
+| **online-cos-3ep-lr5e5** ⭐ | online-contrastive | 3 | 5e-5 | **0.9927** | **+11.0%** |
+| contrastive-cos-4ep-lr3e5 | contrastive | 4 | 3e-5 | 0.9509 | +6.3% |
+
+- **Base AUC 0.8945 → best fine-tuned 0.9927 = +11.0% relevance lift** on the
+  held-out feedback set. Held-out ranking error dropped **0.106 → 0.007 (~93%
+  fewer ranking errors)**; useful-vs-skipped separation rose 0.205 → 0.325.
+- The best version (v3) is promoted via the **MLflow model registry** (alias
+  `production` + `Production` stage). `backend/app/embeddings.py` auto-loads the
+  promoted model from `models/finetuned/production`, so the production embedding
+  path uses it with no code change.
+- Reproducible from a clone via the committed 430-article snapshot
+  (`backend/data/articles_snapshot.json`) — no live DB required. Metrics logged to
+  `logs/phase6_finetune.log`; browse runs with `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
+
+---
+
+## Resume bullets (backed by committed artifacts)
+
+- Built an agentic information pipeline using **LangChain agents with custom
+  tools** for novelty detection, relevance scoring, and story synthesis across
+  **19 real-time sources** (HackerNews + Reddit + RSS).
+- **Fine-tuned a PyTorch sentence transformer** on implicit reading feedback,
+  achieving a **+11% relevance lift vs the base model** (held-out ranking AUC
+  0.89 → 0.99; ~93% fewer ranking errors).
+- Implemented an **MLflow model registry with automated promotion** — tracked
+  **5 experiments across 4 hyperparameter configs**, deploying the best embedding
+  model to the production path.
+- Implemented **semantic deduplication via ChromaDB** vector similarity with a
+  calibrated near-duplicate threshold, filtering cross-source redundant coverage.
+- Designed a **personalized interest-modeling system** with an implicit-feedback
+  loop continuously updating user-profile embeddings (held-out useful/skipped
+  ranking AUC 0.87).
+- Deployed the ingestion pipeline via **FastAPI + PostgreSQL + Redis**,
+  containerized with **Docker Compose**, on a scheduled in-process ingestion loop.
 
 ## Interview talking points
 
