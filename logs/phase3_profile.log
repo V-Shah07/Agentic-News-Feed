@@ -1,0 +1,1 @@
+{"timestamp": "2026-07-21T02:45:03.754024+00:00", "embedding_model": "all-MiniLM-L6-v2", "labeled_total": 220, "train_size": 154, "test_size": 66, "test_useful_n": 61, "test_skipped_n": 5, "held_out_mean_relevance_useful": 0.2737, "held_out_mean_relevance_skipped": 0.1343, "separation": 0.1394, "ranking_auc_useful_over_skipped": 0.8721, "baseline_separation_no_profile": 0.0}

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Local data / secrets
+.env
+*.db
+chroma_data/
+mlruns/
+mlartifacts/
+mlflow.db
+models/finetuned/
+
+# OS
+.DS_Store

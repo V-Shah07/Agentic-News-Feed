@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: newsuser
+          POSTGRES_PASSWORD: newspass
+          POSTGRES_DB: newsfeed
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U newsuser -d newsfeed"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # Unit tests run against SQLite for speed/isolation; Postgres is available
+      # for integration checks via POSTGRES_TEST_URL.
+      DATABASE_URL: "sqlite:///./ci_test.db"
+      POSTGRES_TEST_URL: "postgresql+psycopg2://newsuser:newspass@localhost:5432/newsfeed"
+      INGEST_INTERVAL_SECONDS: "0"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements-ci.txt
+
+      - name: Run tests
+        run: pytest -q
