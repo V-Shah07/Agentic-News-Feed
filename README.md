@@ -132,39 +132,7 @@ registered each as a model version, and promoted the best to production:
   (`backend/data/articles_snapshot.json`) — no live DB required. Metrics logged to
   `logs/phase6_finetune.log`; browse runs with `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
 
----
 
-## Resume bullets (backed by committed artifacts)
-
-- Built an agentic information pipeline using **LangChain agents with custom
-  tools** for novelty detection, relevance scoring, and story synthesis across
-  **19 real-time sources** (HackerNews + Reddit + RSS).
-- **Fine-tuned a PyTorch sentence transformer** on implicit reading feedback,
-  achieving a **+11% relevance lift vs the base model** (held-out ranking AUC
-  0.89 → 0.99; ~93% fewer ranking errors).
-- Implemented an **MLflow model registry with automated promotion** — tracked
-  **5 experiments across 4 hyperparameter configs**, deploying the best embedding
-  model to the production path.
-- Implemented **semantic deduplication via ChromaDB** vector similarity with a
-  calibrated near-duplicate threshold, filtering cross-source redundant coverage.
-- Designed a **personalized interest-modeling system** with an implicit-feedback
-  loop continuously updating user-profile embeddings (held-out useful/skipped
-  ranking AUC 0.87).
-- Deployed the ingestion pipeline via **FastAPI + PostgreSQL + Redis**,
-  containerized with **Docker Compose**, on a scheduled in-process ingestion loop.
-
-## Interview talking points
-
-- **Novelty filtering:** cosine similarity in Chroma against a rolling 30-day
-  window; tunable threshold trades recall vs dedup aggressiveness.
-- **Interest profile:** a profile vector nudged by implicit feedback (useful ↑ /
-  skipped ↓); relevance = similarity to that evolving vector.
-- **Agentic tool choice:** the agent picks `cluster` vs `summarize` from article
-  volume/state, not a fixed script.
-- **Why fine-tune:** aligning embeddings to personal reading history yields a
-  measured relevance lift on held-out feedback (see Phase 6).
-- **Why MLflow registry:** versioned experiments + automated promotion of the best
-  model to the production embedding path; reproducible comparisons.
 
 ## Tests
 
